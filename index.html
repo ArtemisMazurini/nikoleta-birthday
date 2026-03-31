@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#f5f0e8">
+    <title>Happy Birthday</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Dancing+Script:wght@400;700&family=Caveat:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #f5f0e8;
+            --cream-dark: #ede6d8;
+            --blush: #e8b4b8;
+            --dusty-pink: #d4919a;
+            --burgundy: #8b2035;
+            --burgundy-dark: #6b1528;
+            --black: #1a1a1a;
+            --charcoal: #333;
+            --silver: #c0c0c0;
+            --gold-warm: #c9a96e;
+            --rose-gold: #b76e79;
+            --text: #2a2a2a;
+            --text-light: #777;
+            --sat: env(safe-area-inset-top, 0px);
+            --sab: env(safe-area-inset-bottom, 0px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+        body {
+            background: var(--cream);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* =========================
+           PASSWORD SCREEN
+           ========================= */
+        #password-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: var(--sat) 16px var(--sab);
+        }
+
+        .pw-deco {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .pw-star {
+            position: absolute;
+            color: var(--burgundy);
+            opacity: 0.1;
+        }
+
+        .password-box {
+            background: white;
+            border: 1px solid rgba(139,32,53,0.1);
+            border-radius: 6px;
+            padding: 48px 32px;
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 16px 50px rgba(0,0,0,0.05);
+        }
+
+        .pw-icon { font-size: 2.5rem; margin-bottom: 14px; display: block; }
+
+        .password-box h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--burgundy);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .pw-sub {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-style: italic;
+            margin-bottom: 24px;
+        }
+
+        .pw-hint {
+            font-family: 'Caveat', cursive;
+            color: var(--dusty-pink);
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+        }
+
+        .pin-input-container {
+            display: flex;
+            gap: 11px;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
+
+        .pin-digit {
+            width: 48px; height: 58px;
+            background: var(--cream);
+            border: 1.5px solid var(--blush);
+            border-radius: 8px;
+            color: var(--burgundy);
+            font-size: 1.7rem;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            outline: none;
+            -webkit-appearance: none;
+            transition: all 0.3s;
+        }
+
+        .pin-digit:focus {
+            border-color: var(--burgundy);
+            box-shadow: 0 0 0 3px rgba(139,32,53,0.08);
+        }
+
+        .enter-btn {
+            background: var(--burgundy);
+            color: white;
+            border: none;
+            padding: 13px 44px;
+            font-size: 0.85rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 3px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            transition: background 0.3s;
+        }
+
+        .enter-btn:active { background: var(--burgundy-dark); }
+
+        .error-msg {
+            color: var(--burgundy);
+            font-family: 'Caveat', cursive;
+            margin-top: 12px;
+            font-size: 1rem;
+            min-height: 20px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+
+        /* =========================
+           MAIN SITE
+           ========================= */
+        #main-site { display: none; }
+
+        /* Paper texture */
+        .texture-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* =========================
+           FILM STRIP
+           ========================= */
+        .film-strip {
+            background: var(--black);
+            padding: 5px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .film-strip-inner {
+            display: flex;
+            gap: 3px;
+            animation: filmScroll 28s linear infinite;
+        }
+
+        .film-frame {
+            flex: 0 0 50px;
+            height: 38px;
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .film-frame img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .film-strip::before,
+        .film-strip::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0;
+            height: 4px;
+            z-index: 1;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0 5px, var(--black) 5px 7px,
+                transparent 7px 10px, var(--charcoal) 10px 14px,
+                transparent 14px 18px
+            );
+        }
+        .film-strip::before { top: 0; }
+        .film-strip::after { bottom: 0; }
+
+        @keyframes filmScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* =========================
+           HERO (compact)
+           ========================= */
+        .hero {
+            padding: 50px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-stars-bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .scattered-star {
+            position: absolute;
+            color: var(--burgundy);
+            opacity: 0.13;
+        }
+
+        /* Disco ball */
+        .disco-ball {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at 30% 30%, #f5f5f5, #d0d0d0 40%, #a8a8a8 70%, #888);
+            box-shadow: 0 3px 16px rgba(0,0,0,0.1);
+            animation: disco-spin 8s linear infinite;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .disco-ball::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 50%;
+            background: repeating-conic-gradient(rgba(255,255,255,0.35) 0deg 5deg, rgba(200,200,200,0.2) 5deg 10deg);
+        }
+
+        .disco-ball::after {
+            content: '';
+            position: absolute;
+            top: -22px; left: 50%;
+            transform: translateX(-50%);
+            width: 1.5px; height: 22px;
+            background: var(--silver);
+        }
+
+        @keyframes disco-spin { 100% { transform: rotateY(360deg); } }
+
+        .hero-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 10vw, 4.5rem);
+            font-weight: 900;
+            color: var(--burgundy);
+            line-height: 1.05;
+        }
+
+        .hero h1 .script-line {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.8rem, 7vw, 3.5rem);
+            font-weight: 700;
+            color: var(--dusty-pink);
+            display: block;
+            margin-top: -2px;
+        }
+
+        .hero-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 9vw, 4.5rem);
+            font-weight: 900;
+            font-style: italic;
+            color: var(--black);
+            margin: 8px 0 12px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-name::after {
+            content: '';
+            position: absolute;
+            bottom: 4px; left: -3%; right: -3%;
+            height: 8px;
+            background: var(--blush);
+            opacity: 0.3;
+            z-index: -1;
+            transform: skewX(-5deg);
+        }
+
+        /* Stickers */
+        .sticker { position: absolute; pointer-events: none; z-index: 2; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px 0;
+            color: var(--blush);
+        }
+        .divider-line { width: 50px; height: 1px; background: var(--blush); }
+        .divider-star { font-size: 0.7rem; color: var(--burgundy); }
+
+        /* =========================
+           FLOATING PHOTOS
+           ========================= */
+        .floating-media-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .floating-media-track {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px 16px;
+        }
+
+        .floating-photo {
+            position: relative;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            animation: gentle-float 6s ease-in-out infinite;
+        }
+
+        .floating-photo:nth-child(2) { animation-delay: -1s; animation-duration: 7s; }
+        .floating-photo:nth-child(3) { animation-delay: -2s; animation-duration: 5.5s; }
+        .floating-photo:nth-child(4) { animation-delay: -0.5s; animation-duration: 6.5s; }
+        .floating-photo:nth-child(5) { animation-delay: -3s; animation-duration: 7.5s; }
+        .floating-photo:nth-child(6) { animation-delay: -1.5s; animation-duration: 5s; }
+        .floating-photo:nth-child(7) { animation-delay: -2.5s; animation-duration: 6.8s; }
+        .floating-photo:nth-child(8) { animation-delay: -4s; animation-duration: 5.8s; }
+
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+            50% { transform: translateY(-8px) rotate(var(--rot, 0deg)); }
+        }
+
+        .floating-photo .polaroid {
+            background: white;
+            padding: 6px 6px 26px;
+            box-shadow: 1px 2px 12px rgba(0,0,0,0.08);
+            transform: rotate(var(--rot, 0deg));
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: clamp(110px, 28vw, 160px);
+        }
+
+        @media (hover: hover) {
+            .floating-photo:hover .polaroid {
+                transform: rotate(0deg) scale(1.05);
+                box-shadow: 3px 6px 20px rgba(0,0,0,0.12);
+            }
+        }
+
+        .floating-photo:active .polaroid {
+            transform: scale(0.97);
+        }
+
+        .floating-photo .photo-inner {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: var(--cream-dark);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .floating-photo .photo-inner img,
+        .floating-photo .photo-inner video {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .floating-photo .ph-placeholder {
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--blush);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.8rem;
+        }
+
+        .floating-photo .ph-placeholder .ph-icon {
+            font-size: 1.6rem;
+            margin-bottom: 4px;
+        }
+
+        .floating-photo .photo-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 0.75rem;
+            color: var(--charcoal);
+            text-align: center;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .video-badge {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 32px; height: 32px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+
+        /* Tape bits */
+        .tape-bit {
+            position: absolute;
+            z-index: 4;
+            width: 40px;
+            height: 14px;
+            opacity: 0.55;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%) rotate(var(--tape-rot, 0deg));
+        }
+
+        .tape-pink { background: rgba(232,180,184,0.65); }
+        .tape-cream { background: rgba(201,169,110,0.5); }
+
+        /* =========================
+           MESSAGE (the heart)
+           ========================= */
+        .message-section {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 30px 20px 40px;
+            position: relative;
+        }
+
+        .message-card {
+            background: white;
+            border: 1px solid rgba(139,32,53,0.08);
+            padding: 40px 28px;
+            position: relative;
+            box-shadow: 0 8px 35px rgba(0,0,0,0.04);
+        }
+
+        .message-card::before {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(139,32,53,0.06);
+            pointer-events: none;
+        }
+
+        .message-greeting {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            color: var(--burgundy);
+            text-align: center;
+            margin-bottom: 28px;
+            font-weight: 700;
+        }
+
+        .message-body p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.05rem, 3.2vw, 1.2rem);
+            line-height: 1.75;
+            color: var(--charcoal);
+            margin-bottom: 18px;
+        }
+
+        .message-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-body p.emphasis {
+            font-style: italic;
+            color: var(--burgundy);
+        }
+
+        .message-body p.small-gap {
+            margin-bottom: 6px;
+        }
+
+        .message-closing {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .message-closing p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--charcoal);
+            margin-bottom: 6px;
+        }
+
+        .message-closing p.final {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            color: var(--burgundy);
+            margin-top: 12px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           GIFT / OZON BARCODE
+           ========================= */
+        .gift-section {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px 20px 50px;
+            text-align: center;
+        }
+
+        .gift-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+
+        .gift-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gift-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blush), var(--burgundy), var(--dusty-pink));
+        }
+
+        .gift-card img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 4px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .gift-card .gift-placeholder {
+            padding: 40px 20px;
+            color: var(--blush);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+        }
+
+        .gift-card .gift-placeholder .gift-ph-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .gift-hint {
+            font-family: 'Caveat', cursive;
+            font-size: 0.95rem;
+            color: var(--dusty-pink);
+            margin-top: 12px;
+        }
+
+        .add-barcode-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1.5px dashed var(--blush);
+            border-radius: 4px;
+            padding: 12px 24px;
+            color: var(--dusty-pink);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            -webkit-appearance: none;
+            transition: all 0.3s;
+            margin-top: 14px;
+        }
+
+        .add-barcode-btn:active { border-color: var(--burgundy); color: var(--burgundy); }
+        .add-barcode-btn input { display: none; }
+
+        /* =========================
+           ADD MEDIA BUTTON
+           ========================= */
+        .add-media-section {
+            text-align: center;
+            padding: 10px 16px 20px;
+        }
+
+        .add-media-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1.5px dashed var(--blush);
+            border-radius: 4px;
+            padding: 12px 24px;
+            color: var(--dusty-pink);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            -webkit-appearance: none;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .add-media-btn:active { border-color: var(--burgundy); color: var(--burgundy); }
+        .add-media-btn input { display: none; }
+
+        /* =========================
+           LIGHTBOX
+           ========================= */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20,20,20,0.96);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: var(--sat) 0 var(--sab);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+        }
+
+        .lightbox.active { display: flex; }
+
+        .lightbox img, .lightbox video {
+            max-width: 92%;
+            max-height: 85svh;
+            border: 5px solid white;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            border-radius: 2px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: calc(12px + var(--sat));
+            right: 14px;
+            font-size: 1.6rem;
+            color: white;
+            cursor: pointer;
+            z-index: 10001;
+            width: 44px; height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.6rem;
+            color: white;
+            cursor: pointer;
+            padding: 16px;
+            user-select: none;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-prev { left: 2px; }
+        .lightbox-next { right: 2px; }
+
+        /* =========================
+           FOOTER
+           ========================= */
+        footer {
+            text-align: center;
+            padding: 30px 16px calc(16px + var(--sab));
+            border-top: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .footer-hearts {
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+            margin-bottom: 6px;
+            color: var(--blush);
+        }
+
+        footer p {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* =========================
+           ANIMATIONS
+           ========================= */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: confetti-fall linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100svh) rotate(720deg); opacity: 0; }
+        }
+
+        .floating-sticker {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            font-size: 1.2rem;
+            animation: float-up 30s linear infinite;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            8% { opacity: 0.1; }
+            92% { opacity: 0.1; }
+            100% { transform: translateY(-80px) rotate(360deg); opacity: 0; }
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+        @media (min-width: 500px) {
+            .floating-photo .polaroid { width: 150px; }
+        }
+
+        @media (min-width: 700px) {
+            .floating-photo .polaroid { width: 170px; }
+            .message-card { padding: 50px 40px; }
+        }
+
+        @media (max-width: 380px) {
+            .pin-digit { width: 44px; height: 52px; font-size: 1.5rem; }
+            .password-box { padding: 40px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ======== PASSWORD ======== -->
+    <div id="password-screen">
+        <div class="pw-deco" id="pw-deco"></div>
+        <div class="password-box">
+            <span class="pw-icon">&#127880;</span>
+            <h2>&#1058;&#1077;&#1073;&#1077; &#1087;&#1086;&#1076;&#1072;&#1088;&#1086;&#1082; &lt;3</h2>
+            <p class="pw-sub">&#1074;&#1074;&#1077;&#1076;&#1080; &#1089;&#1077;&#1082;&#1088;&#1077;&#1090;&#1085;&#1099;&#1081; &#1082;&#1086;&#1076;</p>
+            <p class="pw-hint">&#1090;&#1099; &#1079;&#1085;&#1072;&#1077;&#1096;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100; ;)</p>
+            <div class="pin-input-container">
+                <input type="tel" class="pin-digit" maxlength="1" inputmode="numeric" autocomplete="off">
+                <input type="tel" class="pin-digit" maxlength="1" inputmode="numeric" autocomplete="off">
+                <input type="tel" class="pin-digit" maxlength="1" inputmode="numeric" autocomplete="off">
+                <input type="tel" class="pin-digit" maxlength="1" inputmode="numeric" autocomplete="off">
+            </div>
+            <button class="enter-btn" onclick="checkPassword()">&#1042;&#1086;&#1081;&#1090;&#1080;</button>
+            <div class="error-msg" id="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- ======== MAIN ======== -->
+    <div id="main-site">
+        <div class="texture-overlay"></div>
+
+        <!-- Film strip -->
+        <div class="film-strip">
+            <div class="film-strip-inner" id="film-strip-top"></div>
+        </div>
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-stars-bg" id="hero-stars"></div>
+            <div class="sticker" style="top:8%;left:5%;font-size:1.8rem;transform:rotate(-15deg)">&#127872;</div>
+            <div class="sticker" style="top:12%;right:7%;color:var(--burgundy);font-size:1.3rem">&#10038;</div>
+            <div class="sticker" style="bottom:10%;right:5%;font-size:1.6rem;transform:rotate(10deg)">&#128247;</div>
+            <div class="sticker" style="bottom:14%;left:7%;color:var(--dusty-pink);font-size:1.1rem">&#10084;</div>
+
+            <div class="disco-ball"></div>
+            <div class="hero-label">&#10022; &#1087;&#1088;&#1072;&#1079;&#1076;&#1085;&#1091;&#1077;&#1084; &#10022;</div>
+            <h1>&#1057; &#1044;&#1085;&#1105;&#1084;<span class="script-line">&#1056;&#1086;&#1078;&#1076;&#1077;&#1085;&#1080;&#1103;!</span></h1>
+            <div class="hero-name">&#1053;&#1080;&#1082;&#1086;&#1083;&#1077;&#1090;&#1072;</div>
+        </section>
+
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span class="divider-star">&#10038;</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <!-- Photos top row -->
+        <div class="floating-media-container">
+            <div class="floating-media-track" id="photos-top">
+                <div class="floating-photo" style="--rot:-3deg" onclick="openLightbox(0)">
+                    <div class="tape-bit tape-pink" style="--tape-rot:-2deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128247;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
+                        <div class="photo-caption">...</div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:2deg" onclick="openLightbox(1)">
+                    <div class="tape-bit tape-cream" style="--tape-rot:3deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128248;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
+                        <div class="photo-caption">...</div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:-1.5deg" onclick="openLightbox(2)">
+                    <div class="tape-bit tape-pink" style="--tape-rot:1deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#127909;</span><span>&#1074;&#1080;&#1076;&#1077;&#1086;</span></div></div>
+                        <div class="photo-caption">...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THE MESSAGE -->
+        <div class="message-section fade-in">
+            <div class="message-card">
+                <div class="message-greeting">&#1057; &#1076;&#1085;&#1105;&#1084; &#1088;&#1086;&#1078;&#1076;&#1077;&#1085;&#1080;&#1103;</div>
+
+                <div class="message-body">
+                    <p class="emphasis">&#1052;&#1099; &#1089; &#1090;&#1086;&#1073;&#1086;&#1081; &#1087;&#1088;&#1086;&#1078;&#1080;&#1083;&#1080; &#1073;&#1086;&#1083;&#1100;&#1096;&#1077;, &#1095;&#1077;&#1084; &#1084;&#1085;&#1086;&#1075;&#1080;&#1077; &#1079;&#1072; &#1074;&#1089;&#1102; &#1078;&#1080;&#1079;&#1085;&#1100;</p>
+
+                    <p>&#1071; &#1095;&#1072;&#1089;&#1090;&#1086; &#1074;&#1089;&#1087;&#1086;&#1084;&#1080;&#1085;&#1072;&#1102;, &#1082;&#1072;&#1082; &#1084;&#1099; &#1077;&#1093;&#1072;&#1083;&#1080; &#1082;&#1091;&#1076;&#1072;-&#1090;&#1086; &#1073;&#1077;&#1079; &#1087;&#1083;&#1072;&#1085;&#1072;, &#1082;&#1072;&#1082; &#1082;&#1091;&#1087;&#1072;&#1083;&#1080;&#1089;&#1100; &#1074; &#1084;&#1086;&#1088;&#1077;, &#1082;&#1072;&#1082; &#1087;&#1088;&#1086;&#1073;&#1086;&#1074;&#1072;&#1083;&#1080; &#1085;&#1086;&#1074;&#1086;&#1077;, &#1082;&#1072;&#1082; &#1087;&#1088;&#1086;&#1089;&#1090;&#1086; &#1078;&#1080;&#1083;&#1080;, &#1082;&#1072;&#1082; &#1087;&#1088;&#1086;&#1093;&#1086;&#1076;&#1080;&#1083;&#1080; &#1095;&#1077;&#1088;&#1077;&#1079; &#1089;&#1083;&#1086;&#1078;&#1085;&#1099;&#1077; &#1084;&#1086;&#1084;&#1077;&#1085;&#1090;&#1099; &#1080; &#1074;&#1089;&#1105; &#1088;&#1072;&#1074;&#1085;&#1086; &#1076;&#1074;&#1080;&#1075;&#1072;&#1083;&#1080;&#1089;&#1100; &#1076;&#1072;&#1083;&#1100;&#1096;&#1077;</p>
+
+                    <p>&#1042; &#1101;&#1090;&#1080;&#1093; &#1074;&#1077;&#1097;&#1072;&#1093; &mdash; &#1085;&#1077; &#1087;&#1088;&#1086;&#1089;&#1090;&#1086; &#1087;&#1086;&#1076;&#1072;&#1088;&#1082;&#1080;. &#1042; &#1085;&#1080;&#1093; &#1082;&#1091;&#1089;&#1086;&#1095;&#1082;&#1080; &#1085;&#1072;&#1096;&#1077;&#1081; &#1078;&#1080;&#1079;&#1085;&#1080;, &#1085;&#1072;&#1096;&#1080; &#1076;&#1086;&#1088;&#1086;&#1075;&#1080;, &#1085;&#1072;&#1096;&#1080; &#1087;&#1088;&#1080;&#1082;&#1083;&#1102;&#1095;&#1077;&#1085;&#1080;&#1103;, &#1085;&#1072;&#1096;&#1080; &laquo;&#1087;&#1088;&#1080;&#1082;&#1086;&#1083;&#1099;&raquo;, &#1082;&#1086;&#1090;&#1086;&#1088;&#1099;&#1077; &#1073;&#1099;&#1083;&#1080; &#1090;&#1086;&#1083;&#1100;&#1082;&#1086; &#1085;&#1072;&#1096;&#1080;&#1084;&#1080;</p>
+
+                    <p class="emphasis">&#1058;&#1099; &#1076;&#1083;&#1103; &#1084;&#1077;&#1085;&#1103; &mdash; &#1095;&#1077;&#1083;&#1086;&#1074;&#1077;&#1082;, &#1089; &#1082;&#1086;&#1090;&#1086;&#1088;&#1099;&#1084; &#1073;&#1099;&#1083;&#1072; &#1085;&#1072;&#1089;&#1090;&#1086;&#1103;&#1097;&#1072;&#1103; &#1078;&#1080;&#1079;&#1085;&#1100;. &#1053;&#1077; &#1080;&#1076;&#1077;&#1072;&#1083;&#1100;&#1085;&#1072;&#1103;, &#1085;&#1086; &#1078;&#1080;&#1074;&#1072;&#1103;, &#1085;&#1072;&#1089;&#1099;&#1097;&#1077;&#1085;&#1085;&#1072;&#1103; &#1080; &#1085;&#1072;&#1089;&#1090;&#1086;&#1103;&#1097;&#1072;&#1103;</p>
+
+                    <p>&#1057;&#1087;&#1072;&#1089;&#1080;&#1073;&#1086; &#1090;&#1077;&#1073;&#1077; &#1079;&#1072; &#1074;&#1089;&#1105; &#1101;&#1090;&#1086;</p>
+
+                    <p class="emphasis">&#1071; &#1087;&#1088;&#1072;&#1074;&#1076;&#1072; &#1093;&#1086;&#1090;&#1077;&#1083;, &#1095;&#1090;&#1086;&#1073;&#1099; &#1091; &#1085;&#1072;&#1089; &#1087;&#1086;&#1083;&#1091;&#1095;&#1080;&#1083;&#1086;&#1089;&#1100;</p>
+                </div>
+
+                <div class="message-closing">
+                    <p>&#1057; &#1076;&#1085;&#1105;&#1084; &#1088;&#1086;&#1078;&#1076;&#1077;&#1085;&#1080;&#1103; &#1077;&#1097;&#1105; &#1088;&#1072;&#1079;</p>
+                    <p>&#1055;&#1091;&#1089;&#1090;&#1100; &#1091; &#1090;&#1077;&#1073;&#1103; &#1074;&#1087;&#1077;&#1088;&#1077;&#1076;&#1080; &#1073;&#1091;&#1076;&#1077;&#1090; &#1084;&#1085;&#1086;&#1075;&#1086; &#1089;&#1074;&#1077;&#1090;&#1072;, &#1089;&#1087;&#1086;&#1082;&#1086;&#1081;&#1089;&#1090;&#1074;&#1080;&#1103; &#1080; &#1087;&#1086;-&#1085;&#1072;&#1089;&#1090;&#1086;&#1103;&#1097;&#1077;&#1084;&#1091; &#1089;&#1095;&#1072;&#1089;&#1090;&#1083;&#1080;&#1074;&#1099;&#1093; &#1084;&#1086;&#1084;&#1077;&#1085;&#1090;&#1086;&#1074;</p>
+                    <p style="margin-top:14px">&#1048; &#1076;&#1072;&#1078;&#1077; &#1089;&#1077;&#1081;&#1095;&#1072;&#1089; &mdash; &#1103; &#1087;&#1088;&#1086;&#1089;&#1090;&#1086; &#1093;&#1086;&#1095;&#1091;, &#1095;&#1090;&#1086;&#1073;&#1099; &#1090;&#1099; &#1073;&#1099;&#1083;&#1072; &#1089;&#1095;&#1072;&#1089;&#1090;&#1083;&#1080;&#1074;&#1072;. &#1055;&#1086;-&#1085;&#1072;&#1089;&#1090;&#1086;&#1103;&#1097;&#1077;&#1084;&#1091;</p>
+                    <p class="final">&#1058;&#1099; &#1101;&#1090;&#1086; &#1079;&#1072;&#1089;&#1083;&#1091;&#1078;&#1080;&#1074;&#1072;&#1077;&#1096;&#1100;</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photos bottom row -->
+        <div class="floating-media-container">
+            <div class="floating-media-track" id="photos-bottom">
+                <div class="floating-photo" style="--rot:2.5deg" onclick="openLightbox(3)">
+                    <div class="tape-bit tape-cream" style="--tape-rot:-1deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128247;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
+                        <div class="photo-caption">...</div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:-2deg" onclick="openLightbox(4)">
+                    <div class="tape-bit tape-pink" style="--tape-rot:2deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128248;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
+                        <div class="photo-caption">...</div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:1.5deg" onclick="openLightbox(5)">
+                    <div class="tape-bit tape-cream" style="--tape-rot:-3deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128247;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
+                        <div class="photo-caption">...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-media-section">
+            <label class="add-media-btn">
+                + &nbsp;&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1092;&#1086;&#1090;&#1086; &#1080; &#1074;&#1080;&#1076;&#1077;&#1086;
+                <input type="file" multiple accept="image/*,video/*" onchange="handleMediaUpload(event)">
+            </label>
+        </div>
+
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span class="divider-star">&#127880;</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <!-- OZON GIFT BARCODE -->
+        <div class="gift-section fade-in">
+            <div class="gift-label">&#1090;&#1074;&#1086;&#1081; &#1087;&#1086;&#1076;&#1072;&#1088;&#1086;&#1082; &#1078;&#1076;&#1105;&#1090; &#1090;&#1077;&#1073;&#1103;</div>
+            <div class="gift-card" id="gift-card">
+                <div class="gift-placeholder" id="gift-placeholder">
+                    <span class="gift-ph-icon">&#127873;</span>
+                    &#1047;&#1076;&#1077;&#1089;&#1100; &#1073;&#1091;&#1076;&#1077;&#1090; &#1096;&#1090;&#1088;&#1080;&#1093;&#1082;&#1086;&#1076; &#1076;&#1083;&#1103; &#1087;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1103;
+                </div>
+            </div>
+            <div class="gift-hint">&#1079;&#1072;&#1073;&#1077;&#1088;&#1080; &#1085;&#1072; &#1087;&#1091;&#1085;&#1082;&#1090;&#1077; &#1074;&#1099;&#1076;&#1072;&#1095;&#1080; Ozon &#10084;</div>
+            <label class="add-barcode-btn" id="barcode-upload-btn">
+                + &nbsp;&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1096;&#1090;&#1088;&#1080;&#1093;&#1082;&#1086;&#1076;
+                <input type="file" accept="image/*" onchange="handleBarcodeUpload(event)">
+            </label>
+        </div>
+
+        <!-- Film strip bottom -->
+        <div class="film-strip">
+            <div class="film-strip-inner" id="film-strip-bottom"></div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-hearts">&#10084; &#10084; &#10084;</div>
+            <p>&#1089;&#1076;&#1077;&#1083;&#1072;&#1085;&#1086; &#1089; &#1083;&#1102;&#1073;&#1086;&#1074;&#1100;&#1102;</p>
+        </footer>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+        <div class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">&#10094;</div>
+        <div class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">&#10095;</div>
+        <div id="lightbox-content"></div>
+    </div>
+
+    <script>
+        // ===== PASSWORD =====
+        const SECRET_PIN = btoa('2024');
+        const pinDigits = document.querySelectorAll('.pin-digit');
+
+        pinDigits.forEach((input, i) => {
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && i < pinDigits.length - 1) pinDigits[i + 1].focus();
+                if (i === pinDigits.length - 1 && input.value.length === 1) setTimeout(checkPassword, 80);
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && i > 0) pinDigits[i - 1].focus();
+                if (e.key === 'Enter') checkPassword();
+            });
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const t = e.clipboardData.getData('text').trim();
+                for (let j = 0; j < Math.min(t.length, 4); j++) {
+                    if (pinDigits[i + j]) pinDigits[i + j].value = t[j];
+                }
+                if (t.length >= 4) setTimeout(checkPassword, 80);
+            });
+            input.addEventListener('focus', () => {
+                for (let j = 0; j < i; j++) {
+                    if (!pinDigits[j].value) { pinDigits[j].focus(); return; }
+                }
+            });
+        });
+
+        function checkPassword() {
+            const entered = Array.from(pinDigits).map(d => d.value).join('');
+            if (entered.length < 4) return;
+            if (btoa(entered) === SECRET_PIN) {
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('main-site').style.display = 'block';
+                initSite();
+                launchConfetti();
+            } else {
+                document.getElementById('error-msg').textContent = '\u043d\u0435\u0432\u0435\u0440\u043d\u044b\u0439 \u043a\u043e\u0434, \u043f\u043e\u043f\u0440\u043e\u0431\u0443\u0439 \u0435\u0449\u0451...';
+                pinDigits.forEach(d => { d.value = ''; d.style.borderColor = 'var(--burgundy)'; setTimeout(() => d.style.borderColor = '', 800); });
+                pinDigits[0].focus();
+                const box = document.querySelector('.password-box');
+                box.style.animation = 'shake 0.4s';
+                setTimeout(() => box.style.animation = '', 400);
+            }
+        }
+
+        // Password screen decorations
+        (function() {
+            const c = document.getElementById('pw-deco');
+            const s = ['\u2726', '\u2736', '\u273A', '\u2022'];
+            for (let i = 0; i < 20; i++) {
+                const el = document.createElement('div');
+                el.className = 'pw-star';
+                el.textContent = s[Math.floor(Math.random() * s.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = Math.random() * 100 + '%';
+                el.style.fontSize = (Math.random() * 16 + 10) + 'px';
+                el.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+                c.appendChild(el);
+            }
+        })();
+
+        // ===== INIT =====
+        function initSite() {
+            populateFilm('film-strip-top');
+            populateFilm('film-strip-bottom');
+
+            const hs = document.getElementById('hero-stars');
+            for (let i = 0; i < 12; i++) {
+                const s = document.createElement('div');
+                s.className = 'scattered-star';
+                s.textContent = ['\u2726', '\u2736', '\u273A'][Math.floor(Math.random() * 3)];
+                s.style.left = Math.random() * 100 + '%';
+                s.style.top = Math.random() * 100 + '%';
+                s.style.fontSize = (Math.random() * 12 + 8) + 'px';
+                s.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+                hs.appendChild(s);
+            }
+
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+            const stickers = ['\u{1F388}', '\u2764', '\u2726', '\u{1F380}', '\u2736'];
+            for (let i = 0; i < 4; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-sticker';
+                el.textContent = stickers[i];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.animationDuration = (Math.random() * 18 + 22) + 's';
+                el.style.animationDelay = (Math.random() * 15) + 's';
+                document.body.appendChild(el);
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function populateFilm(id) {
+            const strip = document.getElementById(id);
+            const cols = ['#e8b4b8', '#d4919a', '#c9a96e', '#b76e79', '#d5d0c8', '#c0c0c0'];
+            for (let i = 0; i < 40; i++) {
+                const f = document.createElement('div');
+                f.className = 'film-frame';
+                f.style.background = cols[i % cols.length];
+                f.style.opacity = (0.45 + Math.random() * 0.5).toFixed(2);
+                strip.appendChild(f);
+            }
+        }
+
+        function launchConfetti() {
+            const cols = ['#e8b4b8', '#d4919a', '#8b2035', '#c9a96e', '#b76e79', '#c0c0c0'];
+            for (let i = 0; i < 35; i++) {
+                const p = document.createElement('div');
+                p.className = 'confetti-piece';
+                const sz = Math.random() * 6 + 3;
+                p.style.left = Math.random() * 100 + '%';
+                p.style.width = sz + 'px';
+                p.style.height = (sz * (Math.random() * 0.5 + 0.5)) + 'px';
+                p.style.background = cols[Math.floor(Math.random() * cols.length)];
+                p.style.borderRadius = Math.random() > 0.5 ? '50%' : '1px';
+                p.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+                p.style.animationDelay = (Math.random() * 1.5) + 's';
+                document.body.appendChild(p);
+            }
+            setTimeout(() => document.querySelectorAll('.confetti-piece').forEach(el => el.remove()), 5500);
+        }
+
+        // ===== LIGHTBOX =====
+        let currentLB = 0;
+
+        function getAllPhotos() {
+            return document.querySelectorAll('.floating-photo');
+        }
+
+        function openLightbox(idx) {
+            const items = getAllPhotos();
+            if (idx >= items.length) return;
+            const item = items[idx];
+            const img = item.querySelector('.photo-inner img');
+            const video = item.querySelector('.photo-inner video');
+            if (!img && !video) return;
+            currentLB = idx;
+            const content = document.getElementById('lightbox-content');
+            content.innerHTML = img
+                ? '<img src="' + img.src + '" alt="">'
+                : '<video src="' + video.src + '" controls autoplay playsinline style="max-width:92%;max-height:85svh;border:5px solid white;border-radius:2px;"></video>';
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.getElementById('lightbox-content').innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        function navigateLightbox(dir) {
+            const items = getAllPhotos();
+            let idx = currentLB;
+            for (let i = 0; i < items.length; i++) {
+                idx = (idx + dir + items.length) % items.length;
+                const it = items[idx];
+                if (it.querySelector('.photo-inner img') || it.querySelector('.photo-inner video')) {
+                    openLightbox(idx);
+                    return;
+                }
+            }
+        }
+
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navigateLightbox(-1);
+            if (e.key === 'ArrowRight') navigateLightbox(1);
+        });
+
+        // Swipe
+        let txStart = 0;
+        document.getElementById('lightbox').addEventListener('touchstart', (e) => { txStart = e.changedTouches[0].screenX; }, { passive: true });
+        document.getElementById('lightbox').addEventListener('touchend', (e) => {
+            const d = e.changedTouches[0].screenX - txStart;
+            if (Math.abs(d) > 50) navigateLightbox(d > 0 ? -1 : 1);
+        }, { passive: true });
+
+        // ===== MEDIA UPLOAD =====
+        function handleMediaUpload(event) {
+            const files = event.target.files;
+            Array.from(files).forEach(file => {
+                const isVideo = file.type.startsWith('video/');
+                const url = URL.createObjectURL(file);
+
+                // Find placeholder
+                const ph = document.querySelector('.ph-placeholder');
+                if (ph) {
+                    const photo = ph.closest('.floating-photo');
+                    const inner = photo.querySelector('.photo-inner');
+                    inner.innerHTML = isVideo
+                        ? '<video src="' + url + '" muted loop playsinline preload="metadata"></video><div class="video-badge">\u25B6</div>'
+                        : '<img src="' + url + '" alt="">';
+                    photo.querySelector('.photo-caption').textContent = file.name.replace(/\.[^/.]+$/, '');
+                } else {
+                    // Add new photo to bottom track
+                    const track = document.getElementById('photos-bottom');
+                    const rots = [-2, 1.5, -3, 2, -1, 3];
+                    const tapes = ['tape-pink', 'tape-cream'];
+                    const idx = getAllPhotos().length;
+                    const el = document.createElement('div');
+                    el.className = 'floating-photo';
+                    el.style.setProperty('--rot', rots[idx % 6] + 'deg');
+                    el.onclick = () => openLightbox(idx);
+                    el.innerHTML =
+                        '<div class="tape-bit ' + tapes[idx % 2] + '" style="--tape-rot:' + rots[idx % 6] + 'deg"></div>' +
+                        '<div class="polaroid"><div class="photo-inner">' +
+                        (isVideo
+                            ? '<video src="' + url + '" muted loop playsinline preload="metadata"></video><div class="video-badge">\u25B6</div>'
+                            : '<img src="' + url + '" alt="">') +
+                        '</div><div class="photo-caption">' + file.name.replace(/\.[^/.]+$/, '') + '</div></div>';
+                    track.appendChild(el);
+                }
+            });
+            event.target.value = '';
+        }
+
+        // ===== BARCODE UPLOAD =====
+        function handleBarcodeUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            const card = document.getElementById('gift-card');
+            card.innerHTML = '<img src="' + url + '" alt="\u0428\u0442\u0440\u0438\u0445\u043a\u043e\u0434">';
+            document.getElementById('barcode-upload-btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
