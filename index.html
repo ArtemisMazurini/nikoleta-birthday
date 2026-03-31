@@ -810,7 +810,7 @@
         <div class="pw-deco" id="pw-deco"></div>
         <div class="password-box">
             <span class="pw-icon">&#127880;</span>
-            <h2>&#1058;&#1077;&#1073;&#1077; &#1087;&#1086;&#1076;&#1072;&#1088;&#1086;&#1082; &lt;3</h2>
+            <h2>&#1058;&#1077;&#1073;&#1077; &#1087;&#1080;&#1076;&#1072;&#1088;&#1086;&#1082; &lt;3</h2>
             <p class="pw-sub">&#1074;&#1074;&#1077;&#1076;&#1080; &#1089;&#1077;&#1082;&#1088;&#1077;&#1090;&#1085;&#1099;&#1081; &#1082;&#1086;&#1076;</p>
             <p class="pw-hint">&#1090;&#1099; &#1079;&#1085;&#1072;&#1077;&#1096;&#1100; &#1087;&#1072;&#1088;&#1086;&#1083;&#1100; ;)</p>
             <div class="pin-input-container">
@@ -859,22 +859,25 @@
                 <div class="floating-photo" style="--rot:-3deg" onclick="openLightbox(0)">
                     <div class="tape-bit tape-pink" style="--tape-rot:-2deg"></div>
                     <div class="polaroid">
-                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128247;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
-                        <div class="photo-caption">...</div>
+                        <div class="photo-inner"><img src="media/01-polaroid.jpg" alt=""></div>
                     </div>
                 </div>
                 <div class="floating-photo" style="--rot:2deg" onclick="openLightbox(1)">
                     <div class="tape-bit tape-cream" style="--tape-rot:3deg"></div>
                     <div class="polaroid">
-                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128248;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
-                        <div class="photo-caption">...</div>
+                        <div class="photo-inner"><img src="media/09-simpsons.jpg" alt=""></div>
                     </div>
                 </div>
                 <div class="floating-photo" style="--rot:-1.5deg" onclick="openLightbox(2)">
                     <div class="tape-bit tape-pink" style="--tape-rot:1deg"></div>
                     <div class="polaroid">
-                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#127909;</span><span>&#1074;&#1080;&#1076;&#1077;&#1086;</span></div></div>
-                        <div class="photo-caption">...</div>
+                        <div class="photo-inner"><img src="media/06-beach.jpg" alt=""></div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:2.5deg" onclick="openLightbox(3)">
+                    <div class="tape-bit tape-cream" style="--tape-rot:-1deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><img src="media/03-books.jpg" alt=""></div>
                     </div>
                 </div>
             </div>
@@ -911,35 +914,52 @@
         <!-- Photos bottom row -->
         <div class="floating-media-container">
             <div class="floating-media-track" id="photos-bottom">
-                <div class="floating-photo" style="--rot:2.5deg" onclick="openLightbox(3)">
-                    <div class="tape-bit tape-cream" style="--tape-rot:-1deg"></div>
-                    <div class="polaroid">
-                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128247;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
-                        <div class="photo-caption">...</div>
-                    </div>
-                </div>
                 <div class="floating-photo" style="--rot:-2deg" onclick="openLightbox(4)">
                     <div class="tape-bit tape-pink" style="--tape-rot:2deg"></div>
                     <div class="polaroid">
-                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128248;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
-                        <div class="photo-caption">...</div>
+                        <div class="photo-inner"><img src="media/05-restaurant.jpg" alt=""></div>
                     </div>
                 </div>
                 <div class="floating-photo" style="--rot:1.5deg" onclick="openLightbox(5)">
                     <div class="tape-bit tape-cream" style="--tape-rot:-3deg"></div>
                     <div class="polaroid">
-                        <div class="photo-inner"><div class="ph-placeholder"><span class="ph-icon">&#128247;</span><span>&#1092;&#1086;&#1090;&#1086;</span></div></div>
-                        <div class="photo-caption">...</div>
+                        <div class="photo-inner"><img src="media/07-car.jpg" alt=""></div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:-1deg" onclick="openLightbox(6)">
+                    <div class="tape-bit tape-pink" style="--tape-rot:1deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><img src="media/02-cafe.jpg" alt=""></div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:2deg" onclick="openLightbox(7)">
+                    <div class="tape-bit tape-cream" style="--tape-rot:-2deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><img src="media/08-hotel.jpg" alt=""></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="add-media-section">
-            <label class="add-media-btn">
-                + &nbsp;&#1044;&#1086;&#1073;&#1072;&#1074;&#1080;&#1090;&#1100; &#1092;&#1086;&#1090;&#1086; &#1080; &#1074;&#1080;&#1076;&#1077;&#1086;
-                <input type="file" multiple accept="image/*,video/*" onchange="handleMediaUpload(event)">
-            </label>
+        <!-- Video + extra -->
+        <div class="floating-media-container">
+            <div class="floating-media-track">
+                <div class="floating-photo" style="--rot:-1.5deg" onclick="openLightbox(8)">
+                    <div class="tape-bit tape-pink" style="--tape-rot:2deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner">
+                            <video src="media/10-video.mp4" muted loop playsinline preload="metadata"></video>
+                            <div class="video-badge">&#9654;</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-photo" style="--rot:2.5deg" onclick="openLightbox(9)">
+                    <div class="tape-bit tape-cream" style="--tape-rot:-1deg"></div>
+                    <div class="polaroid">
+                        <div class="photo-inner"><img src="media/04-rainbow.jpg" alt=""></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="divider">
@@ -1174,44 +1194,6 @@
             if (Math.abs(d) > 50) navigateLightbox(d > 0 ? -1 : 1);
         }, { passive: true });
 
-        // ===== MEDIA UPLOAD =====
-        function handleMediaUpload(event) {
-            const files = event.target.files;
-            Array.from(files).forEach(file => {
-                const isVideo = file.type.startsWith('video/');
-                const url = URL.createObjectURL(file);
-
-                // Find placeholder
-                const ph = document.querySelector('.ph-placeholder');
-                if (ph) {
-                    const photo = ph.closest('.floating-photo');
-                    const inner = photo.querySelector('.photo-inner');
-                    inner.innerHTML = isVideo
-                        ? '<video src="' + url + '" muted loop playsinline preload="metadata"></video><div class="video-badge">\u25B6</div>'
-                        : '<img src="' + url + '" alt="">';
-                    photo.querySelector('.photo-caption').textContent = file.name.replace(/\.[^/.]+$/, '');
-                } else {
-                    // Add new photo to bottom track
-                    const track = document.getElementById('photos-bottom');
-                    const rots = [-2, 1.5, -3, 2, -1, 3];
-                    const tapes = ['tape-pink', 'tape-cream'];
-                    const idx = getAllPhotos().length;
-                    const el = document.createElement('div');
-                    el.className = 'floating-photo';
-                    el.style.setProperty('--rot', rots[idx % 6] + 'deg');
-                    el.onclick = () => openLightbox(idx);
-                    el.innerHTML =
-                        '<div class="tape-bit ' + tapes[idx % 2] + '" style="--tape-rot:' + rots[idx % 6] + 'deg"></div>' +
-                        '<div class="polaroid"><div class="photo-inner">' +
-                        (isVideo
-                            ? '<video src="' + url + '" muted loop playsinline preload="metadata"></video><div class="video-badge">\u25B6</div>'
-                            : '<img src="' + url + '" alt="">') +
-                        '</div><div class="photo-caption">' + file.name.replace(/\.[^/.]+$/, '') + '</div></div>';
-                    track.appendChild(el);
-                }
-            });
-            event.target.value = '';
-        }
 
         // ===== BARCODE UPLOAD =====
         function handleBarcodeUpload(event) {
